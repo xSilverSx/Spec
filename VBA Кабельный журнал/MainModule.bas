@@ -148,8 +148,6 @@ Sub Печать_в_PDF()
         Then MkDir (Name & "\PDF Спецификации")  'Создание папки для сохранения
     
     Sheets(Array("Содержание", "Сводная ведомость A3", "КЖ")).Select
-    
-    ChDir "D:\userp38\Рабочий стол"
     ActiveSheet.ExportAsFixedFormat Type:=xlTypePDF, filename:= _
         Name & "\PDF Спецификации\" & ActiveWorkbook.Name & ".pdf", Quality:=xlQualityStandard, _
         IncludeDocProperties:=True, IgnorePrintAreas:=False, OpenAfterPublish:= _

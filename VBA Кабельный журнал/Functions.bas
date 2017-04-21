@@ -31,16 +31,16 @@ Else
 End If
 End Sub
 
-Function SpecialFolderPath() As String 'определяет путь рабочего стола
-    Dim objWSHShell As Object
-    Dim strSpecialFolderPath
-    Dim strSpecialFolder
- 
-    Set objWSHShell = CreateObject("WScript.Shell")
-    SpecialFolderPath = objWSHShell.SpecialFolders("Desktop")
-    Set objWSHShell = Nothing
-    Exit Function
-ErrorHandler:
-     MsgBox "Error finding " & strSpecialFolder, vbCritical + vbOKOnly, "Error"
-End Function
+'Function SpecialFolderPath() As String 'определяет путь рабочего стола
+'    Dim objWSHShell As Object
+'    Dim strSpecialFolderPath
+'    Dim strSpecialFolder
+'
+'    Set objWSHShell = CreateObject("WScript.Shell")
+'    SpecialFolderPath = objWSHShell.SpecialFolders("Desktop")
+'    Set objWSHShell = Nothing
+'    Exit Function
+'ErrorHandler:
+'     MsgBox "Error finding " & strSpecialFolder, vbCritical + vbOKOnly, "Error"
+'End Function
 
