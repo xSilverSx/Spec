@@ -302,19 +302,7 @@ ActiveWorkbook.SaveAs filename:=strFileN, FileFormat _
 MsgBox ("Файл сохранен:" & vbCr & strFileN)
 End Sub
 
-Function FileLocation(strFileName As String) As Boolean
-'   Dim strFileName As String
-   ' Имя искомого файла
-'   strFileName = strFileN
-   ' Проверка наличия файла (функция Dir возвращает пустую _
-    строку, если по указанному пути файл обнаружить не удалось)
 
-   If Dir(strFileName) <> "" Then
-      FileLocation = True 'MsgBox "Файл " & strFileName & " найден"
-   Else
-      FileLocation = False '"Файл " & strFileName & " не найден"
-   End If
-End Function
 
 
 Private Sub Запомнить(ИмяФайла As String, СтарыйПуть As String) 'Создает текстовый документ, с тем же именем что и перемещаемый файл и сохраняет там бывший путь
@@ -330,7 +318,7 @@ Sub Posicii()
 On Error GoTo Error:
 Dim lLastRow As Integer, i As Integer, iNum As Integer
 Dim rRange As Range, rPosit As Range
-Dim St As String
+Dim st As String
 Dim bNum As Boolean
     If Cells(3, 1).Value <> 1 Then
     MsgBox "Нет возможности пересчитать позиции", vbCritical
@@ -341,8 +329,8 @@ Dim bNum As Boolean
     For Each rPosit In rRange
         i = i + 1
         iNum = iNum + 1
-        St = rRange(i, 1).Value
-        If IsNumeric(St) Then
+        st = rRange(i, 1).Value
+        If IsNumeric(st) Then
 Error:      rRange(i, 1).Value = "=R[-" & iNum & "]C+1"
             iNum = 0
         End If

@@ -1,7 +1,7 @@
 ﻿Attribute VB_Name = "Functions"
 'Романов Владимир Анатольевич e-hoooo@yandex.ru 20/04/2016г.
 
-Function IsBookOpen(wbName As String) As Boolean
+Function IsBookOpen(wbName As String) As Boolean 'Проверка на открытие файла
     Dim wbBook As Workbook: On Error Resume Next
     Set wbBook = Workbooks(wbName)
     IsBookOpen = Not wbBook Is Nothing
@@ -29,6 +29,25 @@ If .Count > 0 Then
 End If
 End With
 End Sub
+
+Function FileLocation(strFileName As String) As Boolean 'Проверка существования файла (полное имя)
+'   Dim strFileName As String
+   ' Имя искомого файла
+'   strFileName = strFileN
+   ' Проверка наличия файла (функция Dir возвращает пустую _
+    строку, если по указанному пути файл обнаружить не удалось)
+
+   If Dir(strFileName) <> "" Then
+      FileLocation = True 'MsgBox "Файл " & strFileName & " найден"
+   Else
+      FileLocation = False '"Файл " & strFileName & " не найден"
+   End If
+End Function
+
+
+'Функции в листе
+
+
 
 
 
