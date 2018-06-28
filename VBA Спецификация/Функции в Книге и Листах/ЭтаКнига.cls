@@ -20,12 +20,17 @@ Private Sub Workbook_Open()
     'Обнуляем значения
     iQuestion = 0
     bClose = 0
+    bOpen = False
 End Sub
 
 Sub Oshibka_na_liste_Perenos()
     Set xlsApp = ThisWorkbook.Application
 End Sub
  
+Private Sub Workbook_WindowActivate(ByVal Wn As Window)
+    If Workbooks.Count = 0 Then Application.Workbooks.Add
+End Sub
+
 Private Sub xlsApp_SheetChange(ByVal Sh As Object, ByVal Target As Range) 'Разбивка по строкам на листе Пернос
 On Error Resume Next   'Иногда возникает ошибка на строке If Selection.Count > 1 Then Exit Sub при обработке закоментировать
 If (TypeOf Sh Is Worksheet) And (Sh.Name = "Перенос") Then
@@ -63,18 +68,16 @@ Private Sub AutoOpen()
     Dim bQuest As Byte
     Dim BaseName As String
 Application.ScreenUpdating = False
+            bOpen = False
             If bClose = 1 Then
                 bClose = 0
                 Application.ScreenUpdating = True
                 End
             End If
-'Подключить_Базу_Данных
-'Иногда при открытии файла эксель не отображаются таблицы, такой код немного исправляет ситуацию
             If Workbooks.Count = 0 Then
                 bOpen = True
                 Set wbOpen = Application.Workbooks.Add
             End If
-            
             AddIns.Add filename:=ThisWorkbook.FullName 'Включение надстройки при открытии файла
             BaseName = CreateObject("Scripting.FileSystemObject").GetBaseName(ThisWorkbook.FullName)
             If AddIns(BaseName).Installed = False Then
@@ -82,7 +85,15 @@ Application.ScreenUpdating = False
                     bClose = 1
                     If bQuest = vbYes Then AddIns(BaseName).Installed = True
             End If
+Подключить_Базу_Данных
 Application.ScreenUpdating = True
+End Sub
+
+Private Sub xlsApp_WorkbookDeactivate(ByVal Wb As Workbook)
+    If bOpen = True Then
+            bOpen = False
+            wbOpen.Close
+    End If
 End Sub
 
 'Function Открытие_файла() As Boolean
@@ -103,27 +114,4 @@ End Sub
 '        End If
 'End Function
 
-Sub Подключить_Базу_Данных()
-Dim Name As String 'Путь расположения надстройки
-Dim strPath As String 'Путь к базе данных
-Dim bOpen As Boolean 'Запоминает была ли открыта книга базы данных
-Dim Wb As Workbook
-Name = ThisWorkbook.Path 'Путь расположения надстройки
-strPath = Name & "\База данных.xlsx" 'Определяем полный путь файла
-If FileLocation(strPath) = True Then 'Проверяем есть ли файл базы данных
-    If IsBookOpen(strPath) = False Then 'Проверяем открыт ли этот файл
-        bOpen = False
-        Set Wb = Workbooks.Open(strPath)
-        Wb.Close
-    End If
-Else
-    MsgBox ("Файл базы не найден")
-End If
-End Sub
 
-Private Sub xlsApp_WorkbookDeactivate(ByVal Wb As Workbook)
-    If bOpen = True Then
-        bOpen = False
-        wbOpen.Close 'Закрыть книгу после исправления
-    End If
-End Sub

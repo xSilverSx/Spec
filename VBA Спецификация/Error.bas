@@ -1,5 +1,5 @@
 ﻿Attribute VB_Name = "Error"
-
+'Модуль обработки ошибок фактически не используется
 Option Explicit
  
 'Private Declare PtrSafe Function GetComputerName Lib "kernel32" Alias "GetComputerNameA" (ByVal lpBuffer As String, nSize As Long) As Long

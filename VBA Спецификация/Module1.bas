@@ -5,7 +5,11 @@ Public TheClosedBook As Boolean
 
 Sub Main()
     ActiveWorkbook.Worksheets("Спецификация").Activate
-    SO_Zapolnen.Show
+        If IsWorkSheetExist("База_СО") = False Then 'В случае отсутствия базы данных вывести сообщение
+            MsgBox "База данных не установлена!", vbCritical
+        Else
+            SO_Zapolnen.Show
+        End If
 End Sub
 Sub addInTheBase()
     ActiveWorkbook.Worksheets("Спецификация").Activate

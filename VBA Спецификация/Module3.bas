@@ -5,7 +5,6 @@ Public BaseName As String, Name As String
 Public inPos As Integer
 Public PathBook As String, strFileN As String
 
-
 Sub Создать_PDF()
         Печать_на_А3
    Name = SpecialFolderPath 'Путь рабочего стола
@@ -27,9 +26,6 @@ Application.ScreenUpdating = False
     Worksheets("Спецификация").Activate
 Application.ScreenUpdating = True
 End Sub
-
-
-
 
 Function Название_документа() As String
     Название_документа = ActiveWorkbook.Name
@@ -65,7 +61,6 @@ End Sub
 Sub Changing_Show()
     Changing.Show
 End Sub
-
 
 Sub Копировать_Листы() 'Обновление спецификации, и сохранение ее как xlsx
 Dim rngAll As Range
@@ -120,7 +115,6 @@ MsgBox ("Файл Обновлен")
 Application.DisplayAlerts = True
 Application.ScreenUpdating = True
 End Sub
-
 
 Sub Копирование_КнопокСО()
     
