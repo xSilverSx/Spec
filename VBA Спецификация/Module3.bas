@@ -193,21 +193,6 @@ Dim a As Boolean, b As Boolean, c As Boolean, d As Boolean
 '            MsgBox (List)
 End Function
 
-
-Function IsWorkSheetExist(sSName As String) As Boolean
-Dim c As Object
-
- On Error GoTo errНandle:
-'   Set c = Sheets(sName)
-   ' Альтернативный вариант :
-    ActiveWorkbook.Sheets(sSName).Unprotect
-    Worksheets(sSName).Cells(1, 1) = Worksheets(sSName).Cells(1, 1)
-    IsWorkSheetExist = True
- Exit Function
-errНandle:
-   IsWorkSheetExist = False
- End Function
-
  Function Удалить_Объекты()
     ActiveSheet.DrawingObjects.Select
     Selection.Delete

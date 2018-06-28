@@ -75,8 +75,29 @@ Dim sCell As String 'Значение для вставки в ячейку
     
 End Sub
 'Функции в листе
+Function IsWorkSheetExist(sSName As String) As Boolean 'Проверка существования листа активной книги
+Dim c As Object
+On Error GoTo errНandle:
+'   Set c = Sheets(sName)
+   ' Альтернативный вариант :
+    ActiveWorkbook.Sheets(sSName).Unprotect
+    Worksheets(sSName).Cells(1, 1) = Worksheets(sSName).Cells(1, 1)
+    IsWorkSheetExist = True
+Exit Function
+errНandle:
+   IsWorkSheetExist = False
+End Function
 
-
+Function IsWorkSheetExistXLAM(sSName As String) As Boolean 'Проверка существования листа в надстройке
+Dim c As Object
+On Error GoTo errНandle:
+    ThisWorkbook.Sheets(sSName).Unprotect
+    ThisWorkbook.Worksheets(sSName).Cells(1, 1) = ThisWorkbook.Worksheets(sSName).Cells(1, 1)
+    IsWorkSheetExistXLAM = True
+Exit Function
+errНandle:
+   IsWorkSheetExistXLAM = False
+End Function
 
 
 
