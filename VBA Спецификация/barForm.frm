@@ -16,6 +16,7 @@ Attribute VB_Exposed = False
 
 
 
+
 Private Sub UserForm_QueryClose(Cancel As Integer, CloseMode As Integer)
     If CloseMode = vbFormControlMenu Then
         ans = MsgBox("Нажмите ""Да"", чтобы остановить процесс." & Chr(13) & _

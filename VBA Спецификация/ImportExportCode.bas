@@ -309,9 +309,10 @@ Function SaveTextToFile(ByVal txt$, ByVal filename$, Optional ByVal encoding$ = 
     End Select
     SaveTextToFile = Err = 0: DoEvents
 End Function
-Sub test()
-Call ChangeFileCharset("D:\userp38\Рабочий стол\Модули\addBase.frm", "Windows-1251", "UTF-8")
-End Sub
+
+'Sub Test()
+'Call ChangeFileCharset("D:\userp38\Рабочий стол\Модули\addBase.frm", "Windows-1251", "UTF-8")
+'End Sub
 
 
 

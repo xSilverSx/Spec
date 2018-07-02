@@ -37,7 +37,7 @@ Application.DisplayAlerts = False
     Else
         MsgBox ("Файл базы не найден")
     End If
-ThisWorkbook.Saved = True 'Исключение сохранения запроса сохранения надстройки
+ThisWorkbook.Saved = True 'Исключение сохранения запроса на сохранение надстройки
 Application.ScreenUpdating = True
 Application.DisplayAlerts = True
 End Sub
@@ -121,16 +121,4 @@ Else
     MsgBox "База данных закрыта. Нелья провести сортировку", vbCritical
 End If
 End Sub
-
-
-
-
-
-
-'Устаревшие функции (не используются)
-
-'Sub addInTheBase() 'Функция запуска формы для добавления позиции в базу
-'    ActiveWorkbook.Worksheets("Спецификация").Activate
-'    addBase.Show
-'End Sub
 
