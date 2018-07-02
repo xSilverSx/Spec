@@ -16,6 +16,7 @@ Attribute VB_Exposed = False
 
 
 
+
 Private Sub ChListPerenos_Click()
 If ChListPerenos = False And ChListSO = False And ChListVR = False Then ChListSO = True
 End Sub

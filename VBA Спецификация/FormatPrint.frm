@@ -17,6 +17,7 @@ Attribute VB_Exposed = False
 
 
 
+
 Option Explicit
 Public Vopros As Boolean 'Действительно ли отпрвить на печать текущий лист
 Public This_Wbk As Workbook

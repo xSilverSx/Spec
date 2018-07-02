@@ -14,6 +14,7 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
+
 Option Explicit
 Public sL As Single, sSh As Single, Massa As Single 'Длина и ширина и масса полосы
 Public arr, i
@@ -49,6 +50,7 @@ For a = 25 To 100 Step 5    'Заполнение ячейки ширина
     ComboBox13.AddItem a
     ComboBox13.Value = "50"
 Next a
+ThisWorkbook.Saved = True
 End Sub
 
 Private Sub ComboBox1_Change() 'Заполнение ячейки подкатегория

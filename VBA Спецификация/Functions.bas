@@ -99,5 +99,56 @@ errНandle:
    IsWorkSheetExistXLAM = False
 End Function
 
+Sub Редактор_Книги() 'Делает книгу надстройки доступной для редактрования
+    If ThisWorkbook.IsAddin = False Then
+    ThisWorkbook.IsAddin = True
+    Exit Sub
+    End If
+    If ThisWorkbook.IsAddin = True Then ThisWorkbook.IsAddin = False
+End Sub
+
+Sub Change_ReferenceStyle() 'Замена стилей R1C1
+    If Application.ReferenceStyle = xlA1 Then
+        Application.ReferenceStyle = xlR1C1
+    Else
+        Application.ReferenceStyle = xlA1
+    End If
+End Sub
+
+Sub Сохранить_Книгу() 'Сохраняет книгу надстройки
+Dim a As Byte
+    a = MsgBox("Действительно пересохранить файл Надстройки?", vbYesNo)
+    If a = vbYes Then ThisWorkbook.Save
+End Sub
+
+Function List() As Boolean 'Проверка существования листов
+Dim a As Boolean, b As Boolean, c As Boolean, d As Boolean
+    a = IsWorkSheetExist("Спецификация")
+    b = IsWorkSheetExist("Перенос")
+    c = IsWorkSheetExist("СО")
+    d = IsWorkSheetExist("ВР")
+        List = a And b And c And d
+'            MsgBox (List)
+End Function
+
+Sub Удалить_пробелы()
+  Dim v As Range
+  For Each v In ActiveSheet.UsedRange.SpecialCells(xlCellTypeConstants)
+    v.Value = Trim(v)
+    While InStr(1, v, "  ", vbTextCompare) > 0
+      v.Value = Replace(v, "  ", " ")
+    Wend
+  Next
+End Sub
+
+Sub Заменить(sWhat As String, sReplacement As String, Целиком As Boolean, rRange As Range)
+'Что меняем, На что меняем, Ячейка целиком или часть текста, Диапазон
+    If Целиком Then
+        rRange.Replace What:=sWhat, Replacement:=sReplacement, LookAt:=xlWhole
+    Else
+        rRange.Replace What:=sWhat, Replacement:=sReplacement, LookAt:=xlPart
+    End If
+End Sub
+
 
 

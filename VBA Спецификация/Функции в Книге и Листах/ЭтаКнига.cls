@@ -90,11 +90,9 @@ Application.ScreenUpdating = True
 End Sub
 
 Private Sub xlsApp_WorkbookDeactivate(ByVal Wb As Workbook)
-    If bOpen = True Then
-            bOpen = False
-            wbOpen.Close
-    End If
+
 End Sub
+
 
 'Function Открытие_файла() As Boolean
 'Dim st As String 'Переменная пути рабочего стола
@@ -115,3 +113,15 @@ End Sub
 'End Function
 
 
+Private Sub xlsApp_WorkbookOpen(ByVal Wb As Workbook)
+Dim b As Boolean
+If bOpen = True Then
+        bOpen = False
+        wbOpen.Close
+End If
+b = List
+If b Then
+    Создать_кнопки
+    ActiveWorkbook.Saved = True
+End If
+End Sub

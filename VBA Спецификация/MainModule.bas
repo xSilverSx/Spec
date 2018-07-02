@@ -1,4 +1,4 @@
-﻿Attribute VB_Name = "Module2"
+﻿Attribute VB_Name = "MainModule"
 'Романов Владимир Анатольевич e-hoooo@yandex.ru 20/04/2016г.
 Option Explicit
 Public Sheet1 As Worksheet, Sheet2 As Worksheet, Sheet3 As Worksheet 'Объявлены перенные Листов
