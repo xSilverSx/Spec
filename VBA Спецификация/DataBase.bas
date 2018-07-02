@@ -1,5 +1,21 @@
 ﻿Attribute VB_Name = "DataBase"
 Option Explicit
+Public TheClosedBook As Boolean
+
+Sub Main() 'Функция запуска формы для вставки позиций из базы
+    ActiveWorkbook.Worksheets("Спецификация").Activate
+        If IsWorkSheetExistXLAM("База_СО") = False Then
+            MsgBox "База данных не установлена!", vbCritical
+        Else
+            SO_Zapolnen.Show
+        End If
+End Sub
+
+Sub Выгрузить_Форму() 'Функция выгрузки формы из памяти
+    TheClosedBook = True
+    Unload VBAProjectSO.SO_Zapolnen
+    Unload VBAProjectSO.addBase
+End Sub
 
 Sub Подключить_Базу_Данных()            'Подключить базу данных в Надстройку
 Dim Name As String                      'Путь расположения надстройки
@@ -105,4 +121,16 @@ Else
     MsgBox "База данных закрыта. Нелья провести сортировку", vbCritical
 End If
 End Sub
+
+
+
+
+
+
+'Устаревшие функции (не используются)
+
+'Sub addInTheBase() 'Функция запуска формы для добавления позиции в базу
+'    ActiveWorkbook.Worksheets("Спецификация").Activate
+'    addBase.Show
+'End Sub
 

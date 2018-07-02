@@ -49,6 +49,7 @@ For a = 25 To 100 Step 5    'Заполнение ячейки ширина
     ComboBox13.AddItem a
     ComboBox13.Value = "50"
 Next a
+ThisWorkbook.Saved = True
 End Sub
 
 Private Sub ComboBox1_Change() 'Заполнение ячейки подкатегория

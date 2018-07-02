@@ -99,5 +99,27 @@ errНandle:
    IsWorkSheetExistXLAM = False
 End Function
 
+Sub Редактор_Книги() 'Делает книгу надстройки доступной для редактрования
+    If ThisWorkbook.IsAddin = False Then
+    ThisWorkbook.IsAddin = True
+    Exit Sub
+    End If
+    If ThisWorkbook.IsAddin = True Then ThisWorkbook.IsAddin = False
+End Sub
+
+Sub Change_ReferenceStyle() 'Замена стилей R1C1
+    If Application.ReferenceStyle = xlA1 Then
+        Application.ReferenceStyle = xlR1C1
+    Else
+        Application.ReferenceStyle = xlA1
+    End If
+End Sub
+
+Sub Сохранить_Книгу() 'Сохраняет книгу надстройки
+Dim a As Byte
+    a = MsgBox("Действительно пересохранить файл Надстройки?", vbYesNo)
+    If a = vbYes Then ThisWorkbook.Save
+End Sub
+
 
 
