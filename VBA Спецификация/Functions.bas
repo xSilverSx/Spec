@@ -150,5 +150,29 @@ Sub Заменить(sWhat As String, sReplacement As String, Целиком As 
     End If
 End Sub
 
+Sub Posicii()
+On Error GoTo Error:
+Dim lLastRow As Integer, i As Integer, iNum As Integer
+Dim rRange As Range, rPosit As Range
+Dim st As String
+Dim bNum As Boolean
+    If Cells(3, 1).Value <> 1 Then
+    MsgBox "Нет возможности пересчитать позиции", vbCritical
+    End
+    End If
+    lLastRow = ActiveSheet.UsedRange.Row + ActiveSheet.UsedRange.Rows.Count - 1
+    Set rRange = Range(Cells(4, 1), Cells(lLastRow, 1))
+    For Each rPosit In rRange
+        i = i + 1
+        iNum = iNum + 1
+        st = rRange(i, 1).Value
+        If IsNumeric(st) Then
+Error:      rRange(i, 1).Value = "=R[-" & iNum & "]C+1"
+            iNum = 0
+        End If
+    Next rPosit
+
+End Sub
+
 
 
