@@ -32,7 +32,6 @@ Application.DisplayAlerts = False
             Set Wb = Workbooks.Open(strPath)
             КопированиеЛиста
             Wb.Close
-            
         End If
     Else
         MsgBox ("Файл базы не найден")

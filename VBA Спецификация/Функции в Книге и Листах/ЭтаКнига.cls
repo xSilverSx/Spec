@@ -85,14 +85,11 @@ Application.ScreenUpdating = False
                     bClose = 1
                     If bQuest = vbYes Then AddIns(BaseName).Installed = True
             End If
+'Проверяем существование листа базы данных в надстройке, если есть то удаляем его
+If IsWorkSheetExistXLAM("База_СО") = True Then УдалитьБазуДанных
 Подключить_Базу_Данных
 Application.ScreenUpdating = True
 End Sub
-
-Private Sub xlsApp_WorkbookDeactivate(ByVal Wb As Workbook)
-
-End Sub
-
 
 'Function Открытие_файла() As Boolean
 'Dim st As String 'Переменная пути рабочего стола
@@ -124,4 +121,9 @@ If b Then
     Создать_кнопки
     ActiveWorkbook.Saved = True
 End If
+End Sub
+
+Private Sub Workbook_BeforeSave(ByVal SaveAsUI As Boolean, Cancel As Boolean)
+    'Удалить базу данных перед сохранением надстройки
+    If IsWorkSheetExistXLAM("База_СО") = True Then УдалитьБазуДанных
 End Sub

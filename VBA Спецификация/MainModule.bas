@@ -303,14 +303,7 @@ Sub Удалить_Знаки()
     Call Заменить(0, "", True, Cells)
     Call Заменить(" ", "", True, Cells)
 End Sub
-Sub Заменить(sWhat As String, sReplacement As String, Целиком As Boolean, rRange As Range)
-'Что меняем, На что меняем, Ячейка целиком или часть текста, Диапазон
-    If Целиком Then
-        rRange.Replace What:=sWhat, Replacement:=sReplacement, LookAt:=xlWhole
-    Else
-        rRange.Replace What:=sWhat, Replacement:=sReplacement, LookAt:=xlPart
-    End If
-End Sub
+
 
 Sub Чистка_Печати()
 
