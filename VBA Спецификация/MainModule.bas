@@ -54,7 +54,8 @@ Do While Spec.Cells(2) <> ""
                 a = True
     If Sheet2.Range("O1") = "ВР" Then
         For i = 1 To 9
-        Cops.Cells(1, i) = Spec.Cells(1, i)
+            Cops.Cells(1, i) = Spec.Cells(1, i)
+            If Cops.Cells(1, i) = "" Then Cops.Cells(1, i) = 0
         Next i
         Set rngAll = Cops.CurrentRegion
         lnRow = rngAll.Rows.Count
@@ -64,7 +65,8 @@ Do While Spec.Cells(2) <> ""
                 Set Spec = Spec.Offset(1, 0)
             Else
             For i = 1 To 9
-            Cops.Cells(1, i) = Spec.Cells(1, i)
+                Cops.Cells(1, i) = Spec.Cells(1, i)
+                If Cops.Cells(1, i) = "" Then Cops.Cells(1, i) = 0
             Next i
             Set rngAll = Cops.CurrentRegion
             lnRow = rngAll.Rows.Count
