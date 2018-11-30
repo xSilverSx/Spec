@@ -1,6 +1,12 @@
 ﻿Attribute VB_Name = "Functions"
 'Романов Владимир Анатольевич e-hoooo@yandex.ru 20/04/2016г.
 Option Explicit
+Public WbOpenFile As Workbook 'Присваивается открытому файлу функцией OpenFolderBook
+Public WbActive As Workbook 'Переменная для назначения активного листа
+Public Const FileOpenFalse As Byte = 0, FileOpenTrue As Byte = 1, FileOpenExist = 2, FileOpenBefore = 3 'Возращаемые значения для функции OpenFolderBook
+Public bOpen As Boolean
+
+
 Function IsBookOpen(wbName As String) As Boolean 'Проверка на открытие файла
     Dim wbBook As Workbook: On Error Resume Next
     Set wbBook = Workbooks(wbName)
@@ -12,7 +18,6 @@ Dim rRange As Range
 Set rRange = Application.InputBox(Prompt:=Описание, title:=Заголовок, Type:=8)
 Какие_Ячейки_Выбрать = rRange.Address
 End Function
-
 
 Sub Draws_In_Selection_Select() ' выделить все рисунки в выбранном диапазоне и удалить
 'обсуждение http://www.planetaexcel.ru/forum/index.php?FID=8&PAGE_NAME=read&TID=37169
@@ -74,7 +79,7 @@ Dim sCell As String 'Значение для вставки в ячейку
     rRange.Value = sCell
     
 End Sub
-'Функции в листе
+
 Function IsWorkSheetExist(sSName As String) As Boolean 'Проверка существования листа активной книги
 Dim c As Object
 On Error GoTo errНandle:
@@ -174,7 +179,35 @@ Error:      rRange(i, 1).Value = "=R[-" & iNum & "]C+1"
 
 End Sub
 
+Function OpenFolderBook(Name As String, Expansion As String) As Byte
+Dim FolderName As String
+Dim strPath As String
+    If IsBookOpen(Name & "." & Expansion) = True Then
+        OpenFolderBook = FileOpenBefore
+        Set WbOpenFile = Workbooks(Name & "." & Expansion)
+    Else
+    FolderName = ThisWorkbook.Path          'Путь расположения надстройки
+    strPath = FolderName & "\" & Name & "." & Expansion  'Определяем полный путь файла
+    If FileLocation(strPath) = False Then
+        OpenFolderBook = FileOpenFalse
+        Call MsgBox("Файл - " & Name & " не найден, проверьте наличие файла в папке - " & FolderName, vbCritical)
+    Else
+        Set WbOpenFile = Workbooks.Open(strPath)
+        OpenFolderBook = FileOpenTrue
+    End If
+    End If
+End Function
 
-
-
+Function SpecialFolderPath() As String 'определяет путь рабочего стола
+    Dim objWSHShell As Object
+    Dim strSpecialFolderPath
+    Dim strSpecialFolder
+ 
+    Set objWSHShell = CreateObject("WScript.Shell")
+    SpecialFolderPath = objWSHShell.SpecialFolders("Desktop")
+    Set objWSHShell = Nothing
+    Exit Function
+ErrorHandler:
+     MsgBox "Error finding " & strSpecialFolder, vbCritical + vbOKOnly, "Error"
+End Function
 

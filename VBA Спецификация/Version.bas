@@ -2,7 +2,6 @@
 'Романов Владимир Анатольевич e-hoooo@yandex.ru 20/04/2016г.
 Option Explicit
 Public iVersion As Integer
-'Public iQuestion As Integer
 
 Sub Сохранить_Версию_Спецификации()
     Dim a As Integer
@@ -83,13 +82,7 @@ End Sub
 
 Sub Запись_Новой_Версии()
     Dim lLastRow As Integer, iVersion As Integer
-        If IsWorkSheetExist("Версии") = False Then
-            Application.ScreenUpdating = False
-            Application.DisplayAlerts = False
-            ThisWorkbook.Sheets("Версии").Copy Before:=ActiveWorkbook.Sheets(1)
-            Application.DisplayAlerts = True
-            Application.ScreenUpdating = True
-        End If
+        If IsWorkSheetExist("Версии") = False Then VersionInsert
         lLastRow = ActiveWorkbook.Sheets("Версии").UsedRange.Row + Sheets("Версии").UsedRange.Rows.Count - 1 'определить количество заполненых ячеек
         If Sheets("Версии").Cells(lLastRow, 1).Value = "" Then
             Sheets("Версии").Cells(lLastRow, 1).Value = 1
@@ -119,6 +112,20 @@ Sub СнятьЗащиту() 'Снять защиту с ячеек которы
         lLastRow = ActiveWorkbook.Sheets("Версии").UsedRange.Row + Sheets("Версии").UsedRange.Rows.Count - 1 'определить количество заполненых ячеек
         Range(Cells(2, 1), Cells(lLastRow, 4)).Locked = False
         ActiveWorkbook.Sheets("Версии").Protect DrawingObjects:=True, Contents:=True, Scenarios:=True 'Включение защиты листа
+End Sub
+
+Sub VersionInsert() 'Вставить лист Версии если он отсутсвует
+Dim b As Byte
+    Application.ScreenUpdating = False
+    Application.DisplayAlerts = False
+        Set WbActive = ActiveWorkbook
+        b = OpenFolderBook("ШаблонSpec", "xlsx")
+        If b = FileOpenTrue Or b = FileOpenBefore Then WbOpenFile.Sheets("Версии").Copy Before:=WbActive.Sheets(1)
+        If b = FileOpenTrue Then WbOpenFile.Close
+        WbActive.Sheets("Версии").Unprotect
+        WbActive.Sheets("Версии").Rows("2:2").Delete
+    Application.DisplayAlerts = True
+    Application.ScreenUpdating = True
 End Sub
 
 
