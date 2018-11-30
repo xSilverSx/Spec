@@ -7,12 +7,12 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = True
-Public bClose As Byte
+Option Explicit
 Private WithEvents xlsApp As Application
 Attribute xlsApp.VB_VarHelpID = -1
-Public iQuestion As Integer
 Public wbOpen As Workbook
-Public bOpen As Boolean
+Public bClose As Byte
+Public iQuestion As Integer
 
 Private Sub Workbook_Open()
     Set xlsApp = ThisWorkbook.Application
@@ -43,7 +43,6 @@ If IsError(Target) Then
         "Проверьте ячейку - " & Target.Address & ", на листе - " & Target.Worksheet.Name, vbCritical
     End
 End If
-   
     With Target
         CS = Len(.Value) 'длина значения текста
         CW = Int(.EntireColumn.ColumnWidth) 'ширина столбца
@@ -85,9 +84,11 @@ Application.ScreenUpdating = False
                     bClose = 1
                     If bQuest = vbYes Then AddIns(BaseName).Installed = True
             End If
+'=================== Подключение базы данных =========================
 'Проверяем существование листа базы данных в надстройке, если есть то удаляем его
 If IsWorkSheetExistXLAM("База_СО") = True Then УдалитьБазуДанных
 Подключить_Базу_Данных
+'=================== Подключение базы данных =========================
 Application.ScreenUpdating = True
 End Sub
 
@@ -118,8 +119,10 @@ If bOpen = True Then
 End If
 b = List
 If b Then
+    Application.DisplayAlerts = False 'Отключение сообщений при открытии файла
     Создать_кнопки
     ActiveWorkbook.Saved = True
+    Application.DisplayAlerts = True
 End If
 End Sub
 

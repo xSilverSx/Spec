@@ -18,25 +18,14 @@ Sub Выгрузить_Форму() 'Функция выгрузки формы 
 End Sub
 
 Sub Подключить_Базу_Данных()            'Подключить базу данных в Надстройку
-Dim Name As String                      'Путь расположения надстройки
-Dim strPath As String                   'Путь к базе данных
-Dim bOpen As Boolean                    'Запоминает была ли открыта книга базы данных
-Dim Wb As Workbook
+Dim b As Byte
 Application.ScreenUpdating = False
 Application.DisplayAlerts = False
-    Name = ThisWorkbook.Path                'Путь расположения надстройки
-    strPath = Name & "\База данных.xlsx"    'Определяем полный путь файла
-    If FileLocation(strPath) = True Then    'Проверяем есть ли файл базы данных
-        If IsBookOpen(strPath) = False Then 'Проверяем открыт ли этот файл
-            bOpen = False
-            Set Wb = Workbooks.Open(strPath)
-            КопированиеЛиста
-            Wb.Close
-        End If
-    Else
-        MsgBox ("Файл базы не найден")
-    End If
-ThisWorkbook.Saved = True 'Исключение сохранения запроса на сохранение надстройки
+    b = OpenFolderBook("База данных", "xlsx")
+    If b = FileOpenTrue Or b = FileOpenBefore Then КопированиеЛиста
+    If b = FileOpenTrue Then WbOpenFile.Close
+    bOpen = False
+    ThisWorkbook.Saved = True 'Исключение сохранения запроса на сохранение надстройки
 Application.ScreenUpdating = True
 Application.DisplayAlerts = True
 End Sub
