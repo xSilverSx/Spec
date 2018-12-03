@@ -17,62 +17,39 @@ Sub Выгрузить_Форму() 'Функция выгрузки формы 
     Unload VBAProjectSO.addBase
 End Sub
 
-Sub Подключить_Базу_Данных()            'Подключить базу данных в Надстройку
+Sub Подключить_Базу_Данных() 'Подключить базу данных в Надстройку Если база отсутсвует, переподключить если база была открыта до этого
 Dim b As Byte
 Application.ScreenUpdating = False
 Application.DisplayAlerts = False
-    b = OpenFolderBook("База данных", "xlsx")
-    If b = FileOpenTrue Or b = FileOpenBefore Then КопированиеЛиста
+    ThisWorkbook.IsAddin = False
+    Set WbActive = ThisWorkbook
+    b = OpenFolderBook("База данных", "xlsx") 'Открыть файл базы данных
+    If b = FileOpenTrue Or b = FileOpenBefore Then _
+    WbOpenFile.Sheets("База_СО").Copy Before:=WbActive.Sheets(1)
     If b = FileOpenTrue Then WbOpenFile.Close
+    If IsWorkSheetExistXLAM("База_СО (2)") Then     'При удаление листа "До копирования" возникает ошибка, поэтому лист удаляем после копирования с переименованием
+        WbActive.Sheets("База_СО").Name = "Удалить"
+        WbActive.Sheets("Удалить").Delete
+        WbActive.Sheets("База_СО (2)").Name = "База_СО"
+        MsgBox "База данных переподключена"
+    End If
     bOpen = False
-    ThisWorkbook.Saved = True 'Исключение сохранения запроса на сохранение надстройки
+    WbActive.IsAddin = True
+    WbActive.Saved = True 'Исключение сохранения запроса на сохранение надстройки
 Application.ScreenUpdating = True
 Application.DisplayAlerts = True
-End Sub
-
-Sub КопированиеЛиста()
-    If ThisWorkbook.IsAddin = True Then Редактор_Книги
-    Workbooks("База данных.xlsx").Sheets("База_СО").Copy Before:=Workbooks("Спецификация Надстройка.xlam").Sheets("Шаблоны")
-    ThisWorkbook.Saved = True 'Исключение сохранения запроса сохранения надстройки
-    Редактор_Книги
 End Sub
 
 Sub УдалитьБазуДанных()
 Application.ScreenUpdating = False
 Application.DisplayAlerts = False
-    If ThisWorkbook.IsAddin = True Then Редактор_Книги
+    If ThisWorkbook.IsAddin = True Then ThisWorkbook.IsAddin = False
         If IsWorkSheetExistXLAM("База_СО") = True Then
             ThisWorkbook.Sheets("База_СО").Delete
-'            MsgBox "Лист База_СО удален"
-'        Else
-'            MsgBox "Лист База_СО не найден"
         End If
-    Редактор_Книги
+    ThisWorkbook.IsAddin = True
 Application.ScreenUpdating = True
 Application.DisplayAlerts = True
-End Sub
-
-Sub ПереподключитьБазуДанных()
-    УдалитьБазуДанных
-    Подключить_Базу_Данных
-    MsgBox "База данных успешно подключена!"
-End Sub
-
-Sub ОткрытьБазуДанных()
-Dim Name As String
-Dim strPath As String
-Name = ThisWorkbook.Path                    'Путь расположения надстройки
-strPath = Name & "\База данных.xlsx"        'Определяем полный путь файла
-If FileLocation(strPath) = True Then        'Проверяем есть ли файл базы данных
-        If IsBookOpen("База данных.xlsx") = False Then 'Проверяем открыт ли этот файл
-            Workbooks.Open (strPath)
-        Else
-        MsgBox "База данных уже открыта"
-            Workbooks("База данных.xlsx").Sheets("База_СО").Activate
-        End If
-Else
-    MsgBox ("Файл базы не найден")
-End If
 End Sub
 
 Sub Сортировка_Базы()
