@@ -3,14 +3,9 @@
 'Романов Владимир Анатольевич e-hoooo@yandex.ru 20/04/2016г.
 Option Explicit 'Потребовать явного объявления всех переменных в файле
 
-'ObnovSpec (компонент: button, атрибут: onAction), 2007
-Sub ObnovSpec(control As IRibbonControl)
-    Копировать_Листы
-End Sub
-
-'ObnovKnopok (компонент: button, атрибут: onAction), 2007
-Sub ObnovKnopok(control As IRibbonControl)
-    Создать_кнопки
+'SaveToday (компонент: button, атрибут: onAction), 2007
+Sub SaveToday(control As IRibbonControl)
+    Сохранить_Сегодня
 End Sub
 
 'NaPerenos (компонент: button, атрибут: onAction), 2007
@@ -18,9 +13,9 @@ Sub NaPerenos(control As IRibbonControl)
     Podgotovka_Show
 End Sub
 
-'SaveToday (компонент: button, атрибут: onAction), 2007
-Sub SaveToday(control As IRibbonControl)
-    Сохранить_Сегодня
+'NewSpec (компонент: button, атрибут: onAction), 2007
+Sub NewSpec(control As IRibbonControl)
+    CreateNewSpec
 End Sub
 
 'RCChange (компонент: button, атрибут: onAction), 2007
@@ -65,7 +60,7 @@ End Sub
 
 'RedactBook (компонент: button, атрибут: onAction), 2007
 Sub ReloadDB(control As IRibbonControl)
-    ПереподключитьБазуДанных
+    Подключить_Базу_Данных
 End Sub
 
 'UnLoadForm (компонент: button, атрибут: onAction), 2007
@@ -87,9 +82,3 @@ End Sub
 Sub OpenDataBase(control As IRibbonControl)
     ОткрытьБазуДанных
 End Sub
-
-''addInBase (компонент: button, атрибут: onAction), 2010/2013
-'Sub addInBase(control As IRibbonControl)
-'    addInTheBase
-'End Sub
-

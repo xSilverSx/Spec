@@ -3,6 +3,17 @@
 Option Explicit
 Public iVersion As Integer
 
+Sub CreateNewSpec()
+Dim b As Byte
+    If IsBookOpen("Спецификация 1.xlsx") = False Then
+        Delete_File (ThisWorkbook.Path & "\" & "Спецификация 1.xlsx")
+        b = OpenFolderBook("ШаблонSpec", "xlsx")   'Открыть файл шаблона
+        WbOpenFile.SaveAs ThisWorkbook.Path & "\" & "Спецификация 1"    'Сохранить новый файл под другим именем
+    Else
+        MsgBox "Книга Спецификация 1 уже открыта, закройте или переименуйте ее чтобы создать новый шаблон"
+    End If
+End Sub
+
 Sub Сохранить_Версию_Спецификации()
     Dim a As Integer
         Application.ScreenUpdating = False
@@ -11,7 +22,6 @@ Sub Сохранить_Версию_Спецификации()
                 Запись_Новой_Версии
             End If
         a = MsgBox("Сохранить в архиве старую версию?", vbYesNo)
-            
             If a = vbYes Then
                 ActiveWorkbook.Sheets("Спецификация").Copy After:=ActiveWorkbook.Sheets(1)
                 ActiveWorkbook.Sheets("СО").Copy After:=ActiveWorkbook.Sheets(2)
@@ -127,7 +137,4 @@ Dim b As Byte
     Application.DisplayAlerts = True
     Application.ScreenUpdating = True
 End Sub
-
-
-
 

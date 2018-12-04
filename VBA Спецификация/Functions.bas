@@ -6,7 +6,6 @@ Public WbActive As Workbook 'Переменная для назначения а
 Public Const FileOpenFalse As Byte = 0, FileOpenTrue As Byte = 1, FileOpenExist = 2, FileOpenBefore = 3 'Возращаемые значения для функции OpenFolderBook
 Public bOpen As Boolean
 
-
 Function IsBookOpen(wbName As String) As Boolean 'Проверка на открытие файла
     Dim wbBook As Workbook: On Error Resume Next
     Set wbBook = Workbooks(wbName)
@@ -209,5 +208,19 @@ Function SpecialFolderPath() As String 'определяет путь рабоч
     Exit Function
 ErrorHandler:
      MsgBox "Error finding " & strSpecialFolder, vbCritical + vbOKOnly, "Error"
+End Function
+
+Function Delete_File(sFileName As String) As Boolean 'Удаление файла по полному имени
+    Dim objFSO As Object, objFile As Object
+    If Dir(sFileName, 16) = "" Then
+        Delete_File = False
+    Else
+    'удаляем файл
+    Set objFSO = CreateObject("Scripting.FileSystemObject")
+    Set objFile = objFSO.GetFile(sFileName)
+    objFile.Delete
+    Delete_File = True
+'    MsgBox "Файл удален", vbInformation, "www.excel-vba.ru"
+    End If
 End Function
 
