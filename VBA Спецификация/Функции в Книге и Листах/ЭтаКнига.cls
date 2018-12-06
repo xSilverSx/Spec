@@ -86,7 +86,6 @@ Application.ScreenUpdating = False
             End If
 '=================== Подключение базы данных =========================
 'Проверяем существование листа базы данных в надстройке, если есть то удаляем его
-If IsWorkSheetExistXLAM("База_СО") = True Then УдалитьБазуДанных
 Подключить_Базу_Данных
 '=================== Подключение базы данных =========================
 Application.ScreenUpdating = True
@@ -120,6 +119,7 @@ End If
 b = List
 If b Then
     Application.DisplayAlerts = False 'Отключение сообщений при открытии файла
+    AddWorkbookFooter
     Создать_кнопки
     ActiveWorkbook.Saved = True
     Application.DisplayAlerts = True

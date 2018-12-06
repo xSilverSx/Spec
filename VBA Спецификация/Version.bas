@@ -2,16 +2,58 @@
 'Романов Владимир Анатольевич e-hoooo@yandex.ru 20/04/2016г.
 Option Explicit
 Public iVersion As Integer
+Public ShActive As Variant
 
-Sub CreateNewSpec()
+Sub CreateNewSpec() 'Создать новый лист спецификации, сохранить его в папку со спецификацией
 Dim b As Byte
     If IsBookOpen("Спецификация 1.xlsx") = False Then
         Delete_File (ThisWorkbook.Path & "\" & "Спецификация 1.xlsx")
-        b = OpenFolderBook("ШаблонSpec", "xlsx")   'Открыть файл шаблона
+        b = OpenFolderBook("Template-Spec", "xlsx")   'Открыть файл шаблона
         WbOpenFile.SaveAs ThisWorkbook.Path & "\" & "Спецификация 1"    'Сохранить новый файл под другим именем
     Else
         MsgBox "Книга Спецификация 1 уже открыта, закройте или переименуйте ее чтобы создать новый шаблон"
     End If
+End Sub
+
+Sub AddWorkbookFooter() 'Добавить основную надпись в книгу
+Dim b As Boolean
+Dim ShActive As Sheets
+    b = List 'Проверяем что книга является спецификацией
+    If b Then
+        AddFooterStamp ("СО")
+        AddFooterStamp ("ВР")
+    End If
+End Sub
+
+Sub AddFooterStamp(StrList As String) 'Добавить картинки штампов в колонтитул слева на листы
+Dim StrFolder As String 'Путь расположения надстройки
+StrFolder = ThisWorkbook.Path
+If ActiveWorkbook.Sheets(StrList).Range("$B$15") <> "" Then 'Изменить если ячейка B15 не пустая, в старой версии там сожержится слово "Согласовано:"
+    If FileLocation(StrFolder & "\Page2.png") And FileLocation(StrFolder & "\Page1.png") Then
+        ActiveWorkbook.Sheets(StrList).PageSetup.LeftFooterPicture.filename = StrFolder & "\Page2.png"
+        ActiveWorkbook.Sheets(StrList).Columns("A:D").Clear
+        With ActiveWorkbook.Sheets(StrList).PageSetup.LeftFooterPicture
+            .Height = 247.5
+            .Width = 52.5
+        End With
+        ActiveWorkbook.Sheets(StrList).PageSetup.FirstPage.LeftFooter.Picture.filename = StrFolder & "\Page1.png"
+        With ActiveWorkbook.Sheets(StrList).PageSetup.FirstPage.LeftFooter.Picture
+            .Height = 135.55
+            .Width = 52.5
+        End With
+        With ActiveWorkbook.Sheets(StrList).PageSetup
+            .LeftFooter = "&G"
+            .FirstPage.LeftFooter.Text = "&G"
+            .OddAndEvenPagesHeaderFooter = False
+            .DifferentFirstPageHeaderFooter = True
+            .ScaleWithDocHeaderFooter = True
+            .AlignMarginsHeaderFooter = True
+        End With
+    Else
+    MsgBox "Основная надпись не обновлена" & Chr(13) & "Файлы Page1.png и(или) Page2.png не найдены." & _
+    Chr(13) & "Файлы можно найти по ссылке https://github.com/xSilverSx/Spec", vbCritical
+    End If
+End If
 End Sub
 
 Sub Сохранить_Версию_Спецификации()
@@ -108,11 +150,9 @@ Sub Запись_Новой_Версии()
             Sheets("СО").Cells(1, 1).Font.ThemeColor = xlThemeColorDark1 'скрыть видимость версии
             Sheets("ВР").Cells(1, 1).Value = iVersion
             Sheets("ВР").Cells(1, 1).Font.ThemeColor = xlThemeColorDark1
-            
             ActiveWorkbook.BuiltinDocumentProperties(32).Value = "Версий: " & lLastRow & _
             "; " & Date & "-Дата последней версии"
             ActiveWorkbook.Sheets("Версии").Protect DrawingObjects:=True, Contents:=True, Scenarios:=True 'Включение защиты листа
-            
 End Sub
 
 Sub СнятьЗащиту() 'Снять защиту с ячеек которые можно изменять
@@ -129,7 +169,7 @@ Dim b As Byte
     Application.ScreenUpdating = False
     Application.DisplayAlerts = False
         Set WbActive = ActiveWorkbook
-        b = OpenFolderBook("ШаблонSpec", "xlsx")
+        b = OpenFolderBook("Template-Spec", "xlsx")
         If b = FileOpenTrue Or b = FileOpenBefore Then WbOpenFile.Sheets("Версии").Copy Before:=WbActive.Sheets(1)
         If b = FileOpenTrue Then WbOpenFile.Close
         WbActive.Sheets("Версии").Unprotect
@@ -137,4 +177,3 @@ Dim b As Byte
     Application.DisplayAlerts = True
     Application.ScreenUpdating = True
 End Sub
-
