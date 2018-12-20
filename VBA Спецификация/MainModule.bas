@@ -3,10 +3,12 @@
 Option Explicit
 Public Sheet1 As Worksheet, Sheet2 As Worksheet, Sheet3 As Worksheet 'Объявлены перенные Листов
 Public Spec As Range, Pechat As Range, Posit As Range
-Public A
+Public AArray
 Public i As Integer
+Public bPerenos As Boolean 'Обозначает что выполняется функция переноса
+
 Function Array_A() 'Объявление массивов
-    A = Array(0, 1, 2, 3, 4, 11, 20, 24, 28, 33) 'Массив колонок для содержимого
+    AArray = Array(0, 1, 2, 3, 4, 11, 20, 24, 28, 33) 'Массив колонок для содержимого
 End Function
 
 Sub Podgotovka_Show() 'Показать форму для переноса
@@ -20,32 +22,25 @@ Dim i As Integer, b As Integer
 Dim lnRow, lnCol, lnR As Long ' lnR Разница между LnRow и старым lnrow
 Dim k As Byte
 Dim A As Boolean 'Логическое значение для первой строчки
-'Неверное_Количество_Листов
 Application.Run "VBAProjectSO.ЭтаКнига.Oshibka_na_liste_Perenos" 'Запуск функции на листе перенос
-
-
-For k = 1 To 2 'Перенос всех листов СО и(или) ВР
 Set Sheet1 = Worksheets("Спецификация")
 Set Sheet2 = Worksheets("Перенос")
-        If Podgotovka.Perenos = True Then 'Скрыть/отобразить лист Перенос, по необходимости
+    If Podgotovka.Perenos = True Then 'Скрыть/отобразить лист Перенос, по необходимости
             Sheet2.Visible = xlSheetVisible
         Else: Sheet2.Visible = xlSheetHidden
-        End If
+    End If
+For k = 1 To 2 'Перенос всех листов СО и(или) ВР
     If Podgotovka.SO = False And k = 2 Then Exit For
     If Podgotovka.VR = True And k = 1 Then Sheet2.Range("O1") = "ВР" 'Записывает что будет создаваться ведомость объемов работ
     If Podgotovka.VR = False And k = 1 Then k = 2
     If Podgotovka.SO = True And k = 2 Then Sheet2.Range("O1") = "СО" 'Записывает что будет создаваться спецификация
     A = False
     lnR = 0
-
+PerenosClear 'Очистка листа перенос
 Sheet2.Activate
-Rows("2:10000").Select
-Selection.Delete
-Range("a2").Select
-
 Set Spec = Sheet1.Range("A2:I2")
 Set Cops = Sheet2.Range("A3:I3")
-         
+bPerenos = True
 Do While Spec.Cells(2) <> ""
                 If A Then      'Прописывается разделитель для СО или ВР
                     If Podgotovka.VR = True And k = 1 Then Cops.Cells(1, 10) = Spec.Cells(1, 11)
@@ -87,6 +82,7 @@ Do While Spec.Cells(2) <> ""
                         End If
             End Select
 Loop
+bPerenos = False
 Удалить_пробелы
 Range("a2").Activate
             If Podgotovka.Perenos = False Then На_печать_все_листы 'Подготовить печать полностью, или только на лист перенос
@@ -96,31 +92,31 @@ End Sub
 Sub Перенос_Строк_На_СО_ВР()
 Dim b As Byte
             If Spec.Cells(1, 1).Value = "ч" Then 'убрать или добавить подчеркивание
-                Pechat.Cells(1, A(2)).Font.Underline = xlUnderlineStyleSingle
-                Else: Pechat.Cells(1, A(2)).Font.Underline = xlUnderlineStyleNone
+                Pechat.Cells(1, AArray(2)).Font.Underline = xlUnderlineStyleSingle
+                Else: Pechat.Cells(1, AArray(2)).Font.Underline = xlUnderlineStyleNone
             End If
                   If i = 1 Or i = 2 Then 'Принудительно провести перенос первой строчки
                         For b = 1 To 9
-                            Pechat.Cells(1, A(b)) = Spec.Cells(1, b)
+                            Pechat.Cells(1, AArray(b)) = Spec.Cells(1, b)
                         Next b
                                 Set Spec = Spec.Offset(1, 0)
                                 Set Pechat = Pechat.Offset(1, 0)
                   Else
                         If Spec.Cells(1, 10).Value = "" Then 'Проверка метки переноса
                             For b = 1 To 9
-                                    Pechat.Cells(1, A(b)) = Spec.Cells(1, b)
+                                    Pechat.Cells(1, AArray(b)) = Spec.Cells(1, b)
                             Next b
                                 Set Spec = Spec.Offset(1, 0)
                                 Set Pechat = Pechat.Offset(1, 0)
                          ElseIf i = 1 Then                      'не переносить первую строку
                             For b = 1 To 9
-                                    Pechat.Cells(1, A(b)) = Spec.Cells(1, b)
+                                    Pechat.Cells(1, AArray(b)) = Spec.Cells(1, b)
                             Next b
                                 Set Spec = Spec.Offset(1, 0)
                                 Set Pechat = Pechat.Offset(1, 0)
                          Else
                                 For b = 1 To 9
-                                        Pechat.Cells(1, A(b)) = " " 'очистить содержимое ячеек которые не переносились
+                                        Pechat.Cells(1, AArray(b)) = " " 'очистить содержимое ячеек которые не переносились
                                 Next b
                             Set Pechat = Pechat.Offset(1, 0)
                         End If
@@ -205,7 +201,6 @@ Set Vozvrat = strPec
 
 intS = InputBox("Задайте количество листов для переноса спецификации Значения от 1 - 50", "Листов для переноса", "1")
 
-
 Do While intS <= 0 Or intS > 50
     MsgBox "Вы задали не коректное число листов, задайте другое число", vbCritical
     intS = InputBox("Вы задали не коректное число листов, попробуйте еще раз значения от 1 - 50", "Ошибка ввода", "2")
@@ -253,13 +248,13 @@ Array_A
         For intS = 1 To intS
             
                     If Spec.Cells(1, 1).Value = "ч" Then 'убрать или добавить подчеркивание
-                        Pechat.Cells(1, A(2)).Font.Underline = xlUnderlineStyleSingle
-                    Else: Pechat.Cells(1, A(2)).Font.Underline = xlUnderlineStyleNone
+                        Pechat.Cells(1, AArray(2)).Font.Underline = xlUnderlineStyleSingle
+                    Else: Pechat.Cells(1, AArray(2)).Font.Underline = xlUnderlineStyleNone
                     End If
             
             
             For b = 1 To 9
-                    Pechat.Cells(1, A(b)) = Spec.Cells(1, b)
+                    Pechat.Cells(1, AArray(b)) = Spec.Cells(1, b)
             Next b
                     Set Spec = Spec.Offset(1, 0)
                     Set Pechat = Pechat.Offset(1, 0)
@@ -298,6 +293,7 @@ Sub Удалить_пробелы()
     Wend
   Next
 End Sub
+
 Sub Удалить_Знаки()
     Call Заменить("_", " ", False, Cells)
     Call Заменить("вр", " ", True, Range("E:E"))
@@ -306,59 +302,41 @@ Sub Удалить_Знаки()
     Call Заменить(" ", "", True, Cells)
 End Sub
 
-
 Sub Чистка_Печати()
-
     If ClearCont.ChListPerenos = True Then 'Чистка листа перенос
-        Set Sheet2 = Worksheets("Перенос")
-        Sheet2.Activate
-        Sheet2.Range("a2:j10000").Select
-        Selection.ClearContents
-        Range("a2").Select
+        PerenosClear
     End If
-    
     If ClearCont.ChListSO = True Then 'Чистка листа СО
-        Set Sheet1 = Worksheets("СО")
-        Sheet1.Activate
-        Sheet1.Rows("40:10000").Delete
-        Sheet1.Range("E2:AK27").Select
-        Selection.ClearContents
-        Range("e2").Select
-        Sheet1.Range("AO35").Value = "1"
+        SoVrClear ("СО")
     End If
-    
     If ClearCont.ChListVR = True Then 'Чистка листа ВР
-        Set Sheet1 = Worksheets("ВР")
-        Sheet1.Activate
-        Sheet1.Rows("40:10000").Delete
-        Sheet1.Range("E2:AK27").Select
-        Selection.ClearContents
-        Range("e2").Select
-        Sheet1.Range("AO35").Value = "1"
+        SoVrClear ("ВР")
     End If
+End Sub
+
+Sub PerenosClear()
+    ActiveWorkbook.Sheets("Перенос").Rows("2:10000").Delete
+End Sub
+
+Sub SoVrClear(strSheet As String)
+    With ActiveWorkbook.Sheets(strSheet)
+        .Rows("40:10000").Delete
+        .Range("E2:AK27").Value = ""
+        .Range("AO35").Value = "1"
+    End With
 End Sub
 
 Sub Очистить_всё()
     ClearCont.Show
 End Sub
 
-'Function Неверное_Количество_Листов()
-'    Set Sheet1 = ActiveWorkbook.Worksheets("Спецификация")
-'    If Sheet1.Range("j2") <= 0 Or Sheet1.Range("j2") > 50 Or Sheet1.Range("k2") <= 0 Or Sheet1.Range("k2") > 50 Then
-'    MsgBox ("Указано неверное количество листов" & vbCr & "Проверьте содержимое ячеек 'J2' и 'K2' на листе 'Спецификация'")
-'    End
-'    End If
-'End Function
-
 Function bCount() As Byte 'Подсчитывает количество листов которое будет в спецификации
 Dim lLastRow As Integer, i As Integer, bMod As Byte
 Dim rRange As Range
-ActiveWorkbook.Sheets("Перенос").Activate
 Set rRange = ActiveWorkbook.Sheets("Перенос").Range("J2")
 lLastRow = ActiveWorkbook.Sheets("Перенос").UsedRange.Row + ActiveSheet.UsedRange.Rows.Count - 1
 For i = 4 To lLastRow
     Set rRange = rRange.Offset(1, 0)
-'    rRange.Activate
     If rRange.Value <> "" Or i = 29 Then
         Set rRange = rRange.Offset(1, 0)
         Exit For
@@ -380,8 +358,6 @@ For i = i To lLastRow
     End If
     bMod = bMod + 1
     Set rRange = rRange.Offset(1, 0)
-'    rRange.Activate
 Next i
-'MsgBox bCount
 End Function
 

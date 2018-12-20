@@ -23,7 +23,7 @@ Application.ScreenUpdating = False
 Application.DisplayAlerts = False
     ThisWorkbook.IsAddin = False
     Set WbActive = ThisWorkbook
-    b = OpenFolderBook("База данных", "xlsx") 'Открыть файл базы данных
+    b = OpenFolderBook("SpecDataBase", "xlsx") 'Открыть файл базы данных
     If b = FileOpenTrue Or b = FileOpenBefore Then _
     WbOpenFile.Sheets("База_СО").Copy Before:=WbActive.Sheets(1)
     If b = FileOpenTrue Then WbOpenFile.Close
@@ -53,8 +53,8 @@ Application.DisplayAlerts = True
 End Sub
 
 Sub Сортировка_Базы()
-If IsBookOpen("База данных.xlsx") = True Then
-    Workbooks("База данных.xlsx").Sheets("База_СО").Activate
+If IsBookOpen("SpecDataBase.xlsx") = True Then
+    Workbooks("SpecDataBase.xlsx").Sheets("База_СО").Activate
     Call Заменить("Раздел", "ЯЯЯЯЯЯЯРаздел", True, Range("A:A")) 'Замена для того чтобы "Раздел" при сортировке оказался в конце
         Worksheets("База_СО").ListObjects("Таблица").Sort.SortFields. _
             Clear

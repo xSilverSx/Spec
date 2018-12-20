@@ -34,33 +34,35 @@ End Sub
 
 Private Sub xlsApp_SheetChange(ByVal Sh As Object, ByVal Target As Range) 'Разбивка по строкам на листе Пернос
 On Error Resume Next   'Иногда возникает ошибка на строке If Selection.Count > 1 Then Exit Sub при обработке закоментировать
-If (TypeOf Sh Is Worksheet) And (Sh.Name = "Перенос") Then
-If Selection.Count > 1 Then Exit Sub
-Dim CW As Integer, CS As Integer, Pr As Integer
-'Application.EnableEvents = 0 '*1
-If IsError(Target) Then
-'    Dim sNameList As String, sNameCell As String
-    MsgBox "Ошибка в одной из ячеек" & Chr(13) & _
-        "Проверьте ячейку - " & Target.Address & ", на листе - " & Target.Worksheet.Name, vbCritical
-    End
-End If
-    With Target
-        CS = Len(.Value) 'длина значения текста
-        CW = Int(.EntireColumn.ColumnWidth) 'ширина столбца
-        CW = InStrRev(.Value, " ", CW) 'Позиция пробела
-        Pr = InStr(.Value, Chr(10)) 'Позиция символа переноса
-        If Pr <> 0 Then If (Pr < CW) Or (CW = 0) Then CW = Pr
-        'сравнение значений положения символа переноса
-        If CW < 1 Then Exit Sub
-        If CS > CW Then
-            .Offset(1, 0).Value = Mid(.Value, CW + 1, CS - CW)
-            .Value = Left(.Value, CW - 1)
-        End If
-    '    .EntireRow.Insert
-    End With
-'Application.EnableEvents = 3 '*1
-'-----------------------------------------------------
-''*1 - стереть строки если кромсать надо несколько раз
+If bPerenos = True Then 'Запуск этой функции только если работает функция Переноса
+    If (TypeOf Sh Is Worksheet) And (Sh.Name = "Перенос") Then
+    If Selection.Count > 1 Then Exit Sub
+    Dim CW As Integer, CS As Integer, Pr As Integer
+    'Application.EnableEvents = 0 '*1
+    If IsError(Target) Then
+    '    Dim sNameList As String, sNameCell As String
+        MsgBox "Ошибка в одной из ячеек" & Chr(13) & _
+            "Проверьте ячейку - " & Target.Address & ", на листе - " & Target.Worksheet.Name, vbCritical
+        End
+    End If
+        With Target
+            CS = Len(.Value) 'длина значения текста
+            CW = Int(.EntireColumn.ColumnWidth) 'ширина столбца
+            CW = InStrRev(.Value, " ", CW) 'Позиция пробела
+            Pr = InStr(.Value, Chr(10)) 'Позиция символа переноса
+            If Pr <> 0 Then If (Pr < CW) Or (CW = 0) Then CW = Pr
+            'сравнение значений положения символа переноса
+            If CW < 1 Then Exit Sub
+            If CS > CW Then
+                .Offset(1, 0).Value = Mid(.Value, CW + 1, CS - CW)
+                .Value = Left(.Value, CW - 1)
+            End If
+        '    .EntireRow.Insert
+        End With
+    'Application.EnableEvents = 3 '*1
+    '-----------------------------------------------------
+    ''*1 - стереть строки если кромсать надо несколько раз
+    End If
 End If
 End Sub
 
