@@ -82,3 +82,8 @@ End Sub
 Sub OpenDataBase(control As IRibbonControl)
     ОткрытьБазуДанных
 End Sub
+
+'OpenDataBase (компонент: button, атрибут: onAction), 2007
+Sub ChangeBookSpecRibbon(control As IRibbonControl)
+    ChangeBookSpec
+End Sub

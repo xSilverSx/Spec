@@ -3,10 +3,10 @@
 Option Explicit
 Public Sheet1 As Worksheet, Sheet2 As Worksheet, Sheet3 As Worksheet 'Объявлены перенные Листов
 Public Spec As Range, Pechat As Range, Posit As Range
-Public a
+Public A
 Public i As Integer
 Function Array_A() 'Объявление массивов
-    a = Array(0, 1, 2, 3, 4, 11, 20, 24, 28, 33) 'Массив колонок для содержимого
+    A = Array(0, 1, 2, 3, 4, 11, 20, 24, 28, 33) 'Массив колонок для содержимого
 End Function
 
 Sub Podgotovka_Show() 'Показать форму для переноса
@@ -19,7 +19,7 @@ Dim rngStart As Range, rngAll As Range, angX As Range, rngSumm As Range, Spec As
 Dim i As Integer, b As Integer
 Dim lnRow, lnCol, lnR As Long ' lnR Разница между LnRow и старым lnrow
 Dim k As Byte
-Dim a As Boolean 'Логическое значение для первой строчки
+Dim A As Boolean 'Логическое значение для первой строчки
 'Неверное_Количество_Листов
 Application.Run "VBAProjectSO.ЭтаКнига.Oshibka_na_liste_Perenos" 'Запуск функции на листе перенос
 
@@ -35,7 +35,7 @@ Set Sheet2 = Worksheets("Перенос")
     If Podgotovka.VR = True And k = 1 Then Sheet2.Range("O1") = "ВР" 'Записывает что будет создаваться ведомость объемов работ
     If Podgotovka.VR = False And k = 1 Then k = 2
     If Podgotovka.SO = True And k = 2 Then Sheet2.Range("O1") = "СО" 'Записывает что будет создаваться спецификация
-    a = False
+    A = False
     lnR = 0
 
 Sheet2.Activate
@@ -47,11 +47,11 @@ Set Spec = Sheet1.Range("A2:I2")
 Set Cops = Sheet2.Range("A3:I3")
          
 Do While Spec.Cells(2) <> ""
-                If a Then      'Прописывается разделитель для СО или ВР
+                If A Then      'Прописывается разделитель для СО или ВР
                     If Podgotovka.VR = True And k = 1 Then Cops.Cells(1, 10) = Spec.Cells(1, 11)
                     If Podgotovka.SO = True And k = 2 Then Cops.Cells(1, 10) = Spec.Cells(1, 10)
                 End If
-                a = True
+                A = True
     If Sheet2.Range("O1") = "ВР" Then
         For i = 1 To 9
             Cops.Cells(1, i) = Spec.Cells(1, i)
@@ -96,31 +96,31 @@ End Sub
 Sub Перенос_Строк_На_СО_ВР()
 Dim b As Byte
             If Spec.Cells(1, 1).Value = "ч" Then 'убрать или добавить подчеркивание
-                Pechat.Cells(1, a(2)).Font.Underline = xlUnderlineStyleSingle
-                Else: Pechat.Cells(1, a(2)).Font.Underline = xlUnderlineStyleNone
+                Pechat.Cells(1, A(2)).Font.Underline = xlUnderlineStyleSingle
+                Else: Pechat.Cells(1, A(2)).Font.Underline = xlUnderlineStyleNone
             End If
                   If i = 1 Or i = 2 Then 'Принудительно провести перенос первой строчки
                         For b = 1 To 9
-                            Pechat.Cells(1, a(b)) = Spec.Cells(1, b)
+                            Pechat.Cells(1, A(b)) = Spec.Cells(1, b)
                         Next b
                                 Set Spec = Spec.Offset(1, 0)
                                 Set Pechat = Pechat.Offset(1, 0)
                   Else
                         If Spec.Cells(1, 10).Value = "" Then 'Проверка метки переноса
                             For b = 1 To 9
-                                    Pechat.Cells(1, a(b)) = Spec.Cells(1, b)
+                                    Pechat.Cells(1, A(b)) = Spec.Cells(1, b)
                             Next b
                                 Set Spec = Spec.Offset(1, 0)
                                 Set Pechat = Pechat.Offset(1, 0)
                          ElseIf i = 1 Then                      'не переносить первую строку
                             For b = 1 To 9
-                                    Pechat.Cells(1, a(b)) = Spec.Cells(1, b)
+                                    Pechat.Cells(1, A(b)) = Spec.Cells(1, b)
                             Next b
                                 Set Spec = Spec.Offset(1, 0)
                                 Set Pechat = Pechat.Offset(1, 0)
                          Else
                                 For b = 1 To 9
-                                        Pechat.Cells(1, a(b)) = " " 'очистить содержимое ячеек которые не переносились
+                                        Pechat.Cells(1, A(b)) = " " 'очистить содержимое ячеек которые не переносились
                                 Next b
                             Set Pechat = Pechat.Offset(1, 0)
                         End If
@@ -253,13 +253,13 @@ Array_A
         For intS = 1 To intS
             
                     If Spec.Cells(1, 1).Value = "ч" Then 'убрать или добавить подчеркивание
-                        Pechat.Cells(1, a(2)).Font.Underline = xlUnderlineStyleSingle
-                    Else: Pechat.Cells(1, a(2)).Font.Underline = xlUnderlineStyleNone
+                        Pechat.Cells(1, A(2)).Font.Underline = xlUnderlineStyleSingle
+                    Else: Pechat.Cells(1, A(2)).Font.Underline = xlUnderlineStyleNone
                     End If
             
             
             For b = 1 To 9
-                    Pechat.Cells(1, a(b)) = Spec.Cells(1, b)
+                    Pechat.Cells(1, A(b)) = Spec.Cells(1, b)
             Next b
                     Set Spec = Spec.Offset(1, 0)
                     Set Pechat = Pechat.Offset(1, 0)

@@ -9,7 +9,7 @@ Dim rngStart As Range, rngAll As Range, angX As Range, rngSumm As Range, KG As R
 Dim i As Integer, b As Integer
 Dim lnRow, lnCol, lnR As Long ' lnR Разница между LnRow и старым lnrow
 Dim k As Byte
-Dim a As Boolean 'Логическое значение для первой строчки
+Dim A As Boolean 'Логическое значение для первой строчки
 Set Sheet1 = Worksheets("Кабельный журнал")
 Set Sheet2 = Worksheets("ZCAD")
 Sheet2.Activate

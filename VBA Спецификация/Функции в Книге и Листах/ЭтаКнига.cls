@@ -13,6 +13,7 @@ Attribute xlsApp.VB_VarHelpID = -1
 Public wbOpen As Workbook
 Public bClose As Byte
 Public iQuestion As Integer
+Public StrBufSheet As String
 
 Private Sub Workbook_Open()
     Set xlsApp = ThisWorkbook.Application
@@ -91,6 +92,26 @@ Application.ScreenUpdating = False
 Application.ScreenUpdating = True
 End Sub
 
+Private Sub xlsApp_WorkbookAfterSave(ByVal Wb As Workbook, ByVal Success As Boolean)
+Dim b As Boolean
+b = ListSpec
+    If b Then
+        Создать_кнопки
+        ActiveWorkbook.Saved = True
+        ActiveWorkbook.Sheets(StrBufSheet).Activate
+    End If
+End Sub
+
+Private Sub xlsApp_WorkbookBeforeSave(ByVal Wb As Workbook, ByVal SaveAsUI As Boolean, Cancel As Boolean)
+Dim b As Boolean
+b = ListSpec
+    If b Then
+        StrBufSheet = ActiveWorkbook.ActiveSheet.Name
+        AllObjButtonDelete
+        KillLinks 'Удаляем ссылку на надстройку перед сохранением
+    End If
+End Sub
+
 'Function Открытие_файла() As Boolean
 'Dim st As String 'Переменная пути рабочего стола
 'Dim Q As String 'Переменная вопроса
@@ -112,18 +133,22 @@ End Sub
 
 Private Sub xlsApp_WorkbookOpen(ByVal Wb As Workbook)
 Dim b As Boolean
+Application.ScreenUpdating = False
 If bOpen = True Then
         bOpen = False
         wbOpen.Close
 End If
-b = List
+b = ListSpec
 If b Then
-    Application.DisplayAlerts = False 'Отключение сообщений при открытии файла
-    AddWorkbookFooter
+    If ActiveWorkbook.Sheets("СО").Range("$B$15") <> "" Then 'Изменить если ячейка B15 не пустая, в старой версии там сожержится слово "Согласовано:"
+        If MsgBox("Заменить основную надпись в спецификации слева? На листах СО и ВР", vbYesNo) = vbYes Then 'Удаление по запросу
+            AddWorkbookFooter
+        End If
+    End If
     Создать_кнопки
     ActiveWorkbook.Saved = True
-    Application.DisplayAlerts = True
 End If
+Application.ScreenUpdating = True
 End Sub
 
 Private Sub Workbook_BeforeSave(ByVal SaveAsUI As Boolean, Cancel As Boolean)

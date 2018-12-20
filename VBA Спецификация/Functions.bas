@@ -103,7 +103,7 @@ errНandle:
    IsWorkSheetExistXLAM = False
 End Function
 
-Sub Редактор_Книги() 'Делает книгу надстройки доступной для редактрования
+Sub ChangeBookSpec() 'Делает книгу надстройки доступной для редактрования
     If ThisWorkbook.IsAddin = False Then
     ThisWorkbook.IsAddin = True
     Exit Sub
@@ -120,19 +120,18 @@ Sub Change_ReferenceStyle() 'Замена стилей R1C1
 End Sub
 
 Sub Сохранить_Книгу() 'Сохраняет книгу надстройки
-Dim a As Byte
-    a = MsgBox("Действительно пересохранить файл Надстройки?", vbYesNo)
-    If a = vbYes Then ThisWorkbook.Save
+Dim A As Byte
+    A = MsgBox("Действительно пересохранить файл Надстройки?", vbYesNo)
+    If A = vbYes Then ThisWorkbook.Save
 End Sub
 
-Function List() As Boolean 'Проверка существования листов
-Dim a As Boolean, b As Boolean, c As Boolean, d As Boolean
-    a = IsWorkSheetExist("Спецификация")
+Function ListSpec() As Boolean 'Проверка существования листов
+Dim A As Boolean, b As Boolean, c As Boolean, d As Boolean
+    A = IsWorkSheetExist("Спецификация")
     b = IsWorkSheetExist("Перенос")
     c = IsWorkSheetExist("СО")
     d = IsWorkSheetExist("ВР")
-        List = a And b And c And d
-'            MsgBox (List)
+        ListSpec = A And b And c And d
 End Function
 
 Sub Удалить_пробелы()
@@ -223,4 +222,42 @@ Function Delete_File(sFileName As String) As Boolean 'Удаление файл�
 '    MsgBox "Файл удален", vbInformation, "www.excel-vba.ru"
     End If
 End Function
+
+Sub KillLinks()     'удаляет ссылку на надстройку
+    Dim iLinks As Variant, i&
+    Dim s As String
+    iLinks = ActiveWorkbook.LinkSources(xlExcelLinks)
+    If Not IsEmpty(iLinks) Then
+        For i = 1 To UBound(iLinks)
+            s = ThisWorkbook.FullName
+            If s = iLinks(i) Then ActiveWorkbook.BreakLink Name:=iLinks(i), Type:=xlExcelLinks
+        Next i
+    End If
+End Sub
+
+Sub ObjButtonDelete() 'Удаление кнопок на активном листе
+Dim n As Integer
+Dim s As String
+    n = ActiveSheet.DrawingObjects.Count
+    If n <> 0 Then
+        For i = n To 1 Step -1
+            s = ActiveSheet.DrawingObjects(i).Name
+            s = Left(s, 6)  'берем 6 первых символов объекта (для поиска кнопок) обозначенных Button
+            If s = "Button" Then ActiveSheet.DrawingObjects(i).Delete 'удаляем кнопку
+        Next i
+    End If
+End Sub
+
+Sub AllObjButtonDelete()
+    Dim b As Boolean
+    b = ListSpec
+    If b Then
+        ActiveWorkbook.Sheets("Спецификация").Activate
+        ObjButtonDelete
+        ActiveWorkbook.Sheets("СО").Activate
+        ObjButtonDelete
+        ActiveWorkbook.Sheets("ВР").Activate
+        ObjButtonDelete
+    End If
+End Sub
 

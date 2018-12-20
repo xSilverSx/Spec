@@ -36,10 +36,10 @@ End Sub
 
 Sub nulll()
 On Error GoTo Error:
-Dim a As String
+Dim A As String
 Dim x As Integer
-a = "string"
-x = a
+A = "string"
+x = A
 
 Exit Sub
 Error:

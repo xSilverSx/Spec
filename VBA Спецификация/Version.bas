@@ -18,7 +18,7 @@ End Sub
 Sub AddWorkbookFooter() 'Добавить основную надпись в книгу
 Dim b As Boolean
 Dim ShActive As Sheets
-    b = List 'Проверяем что книга является спецификацией
+    b = ListSpec 'Проверяем что книга является спецификацией
     If b Then
         AddFooterStamp ("СО")
         AddFooterStamp ("ВР")
@@ -28,43 +28,50 @@ End Sub
 Sub AddFooterStamp(StrList As String) 'Добавить картинки штампов в колонтитул слева на листы
 Dim StrFolder As String 'Путь расположения надстройки
 StrFolder = ThisWorkbook.Path
-If ActiveWorkbook.Sheets(StrList).Range("$B$15") <> "" Then 'Изменить если ячейка B15 не пустая, в старой версии там сожержится слово "Согласовано:"
     If FileLocation(StrFolder & "\Page2.png") And FileLocation(StrFolder & "\Page1.png") Then
         ActiveWorkbook.Sheets(StrList).PageSetup.LeftFooterPicture.filename = StrFolder & "\Page2.png"
         ActiveWorkbook.Sheets(StrList).Columns("A:D").Clear
-        With ActiveWorkbook.Sheets(StrList).PageSetup.LeftFooterPicture
-            .Height = 247.5
-            .Width = 52.5
-        End With
-        ActiveWorkbook.Sheets(StrList).PageSetup.FirstPage.LeftFooter.Picture.filename = StrFolder & "\Page1.png"
-        With ActiveWorkbook.Sheets(StrList).PageSetup.FirstPage.LeftFooter.Picture
-            .Height = 135.55
-            .Width = 52.5
-        End With
-        With ActiveWorkbook.Sheets(StrList).PageSetup
-            .LeftFooter = "&G"
-            .FirstPage.LeftFooter.Text = "&G"
-            .OddAndEvenPagesHeaderFooter = False
-            .DifferentFirstPageHeaderFooter = True
-            .ScaleWithDocHeaderFooter = True
-            .AlignMarginsHeaderFooter = True
+        With ActiveWorkbook.Sheets(StrList)
+            .Rows("28:28").RowHeight = 24   'Корректировка высоты строки, для выравнивания штампа
+            With .PageSetup.LeftFooterPicture
+                .Height = 247.5
+                .Width = 52.5
+            End With
+            .PageSetup.FirstPage.LeftFooter.Picture.filename = StrFolder & "\Page1.png"
+            With .PageSetup.FirstPage.LeftFooter.Picture
+                .Height = 135.55
+                .Width = 52.5
+            End With
+            With .PageSetup
+                .LeftFooter = "&G"
+                .FirstPage.LeftFooter.Text = "&G"
+                .OddAndEvenPagesHeaderFooter = False
+                .DifferentFirstPageHeaderFooter = True
+                .ScaleWithDocHeaderFooter = True
+                .AlignMarginsHeaderFooter = True
+                .LeftMargin = Application.InchesToPoints(0.196850393700787)
+                .RightMargin = Application.InchesToPoints(0.196850393700787)
+                .TopMargin = Application.InchesToPoints(0.196850393700787)
+                .BottomMargin = Application.InchesToPoints(0.196850393700787)
+                .HeaderMargin = Application.InchesToPoints(0.196850393700787)
+                .FooterMargin = Application.InchesToPoints(0.31496062992126)
+            End With
         End With
     Else
     MsgBox "Основная надпись не обновлена" & Chr(13) & "Файлы Page1.png и(или) Page2.png не найдены." & _
     Chr(13) & "Файлы можно найти по ссылке https://github.com/xSilverSx/Spec", vbCritical
     End If
-End If
 End Sub
 
 Sub Сохранить_Версию_Спецификации()
-    Dim a As Integer
+    Dim A As Integer
         Application.ScreenUpdating = False
         Application.DisplayAlerts = False
             If IsWorkSheetExist("Версии") = False Then
                 Запись_Новой_Версии
             End If
-        a = MsgBox("Сохранить в архиве старую версию?", vbYesNo)
-            If a = vbYes Then
+        A = MsgBox("Сохранить в архиве старую версию?", vbYesNo)
+            If A = vbYes Then
                 ActiveWorkbook.Sheets("Спецификация").Copy After:=ActiveWorkbook.Sheets(1)
                 ActiveWorkbook.Sheets("СО").Copy After:=ActiveWorkbook.Sheets(2)
                 ActiveWorkbook.Sheets("ВР").Copy After:=ActiveWorkbook.Sheets(3)
@@ -96,7 +103,7 @@ End Sub
 
 Sub Оставить_одну_версию()
     Dim lLastRow As Integer, iDelList As Integer, RwsDel As String
-    Dim a As Integer
+    Dim A As Integer
         
         If IsWorkSheetExist("Версии") = False Then
                 MsgBox "В этом файле только одна версия", vbCritical
@@ -105,8 +112,8 @@ Sub Оставить_одну_версию()
                 ActiveWorkbook.Sheets("Версии").Unprotect 'Снятие защиты листа
                 Application.ScreenUpdating = False
                 Application.DisplayAlerts = False
-                a = MsgBox("Оставить только последнюю версию?", vbYesNo)
-                If a = vbYes Then
+                A = MsgBox("Оставить только последнюю версию?", vbYesNo)
+                If A = vbYes Then
                     lLastRow = ActiveWorkbook.Sheets("Версии").UsedRange.Row + Sheets("Версии").UsedRange.Rows.Count - 1
                     iDelList = Sheets("Версии").Cells(lLastRow, 1).Value
                     For i = 1 To lLastRow
