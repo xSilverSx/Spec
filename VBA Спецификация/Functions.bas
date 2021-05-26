@@ -261,3 +261,12 @@ Sub AllObjButtonDelete()
     End If
 End Sub
 
+Sub ОткрытьБазуДанных()
+Dim b As Byte
+    b = OpenFolderBook("SpecDataBase", "xlsx")
+    If b = FileOpenBefore Then
+        MsgBox ("База данных уже открыта")
+        Workbooks("SpecDataBase.xlsx").Activate
+    End If
+End Sub
+
