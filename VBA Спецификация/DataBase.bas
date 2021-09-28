@@ -22,6 +22,7 @@ Dim b As Byte
 Application.ScreenUpdating = False
 Application.DisplayAlerts = False
     ThisWorkbook.IsAddin = False
+	Выгрузить_Форму 'Закрытие формы перед подключением базы
     Set WbActive = ThisWorkbook
     b = OpenFolderBook("SpecDataBase", "xlsx") 'Открыть файл базы данных
     If b = FileOpenTrue Or b = FileOpenBefore Then _
