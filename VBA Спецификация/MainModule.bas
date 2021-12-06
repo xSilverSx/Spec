@@ -22,6 +22,7 @@ Dim i As Integer, b As Integer
 Dim lnRow, lnCol, lnR As Long ' lnR Разница между LnRow и старым lnrow
 Dim k As Byte
 Dim A As Boolean 'Логическое значение для первой строчки
+Dim rPropusk As String
 Application.Run "VBAProjectSO.ЭтаКнига.Oshibka_na_liste_Perenos" 'Запуск функции на листе перенос
 Set Sheet1 = Worksheets("Спецификация")
 Set Sheet2 = Worksheets("Перенос")
@@ -73,7 +74,8 @@ Do While Spec.Cells(2) <> ""
                     Set Cops = Cops.Offset(lnRow - lnR, 0)
                     lnR = lnRow
                 Case Else
-                        If Podgotovka.NePropusk = True Then
+                        rPropusk = Right(Spec.Cells(1).Value, 1) 'Записать последний символ в строке позиции
+                        If Podgotovka.NePropusk = True Or rPropusk = "_" Then 'Если стоит галочка не пропускать, или последний символ "_" то строка не пропускается
                                 Set Cops = Cops.Offset(lnRow - lnR, 0)
                                 lnR = lnRow
                                 Else
@@ -89,6 +91,7 @@ Range("a2").Activate
 Next k
     Application.ScreenUpdating = True
 End Sub
+
 Sub Перенос_Строк_На_СО_ВР()
 Dim b As Byte
             If Spec.Cells(1, 1).Value = "ч" Then 'убрать или добавить подчеркивание
