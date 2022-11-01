@@ -1,4 +1,4 @@
-﻿Attribute VB_Name = "MainModule"
+Attribute VB_Name = "MainModule"
 'Романов Владимир Анатольевич e-hoooo@yandex.ru 20/04/2016г.
 Option Explicit
 Public Sheet1 As Worksheet, Sheet2 As Worksheet, Sheet3 As Worksheet 'Объявлены перенные Листов
@@ -92,6 +92,17 @@ Next k
     Application.ScreenUpdating = True
 End Sub
 
+Function ПозицияЧистка(s As String) As String 'очистка строки от символа "_" после первого вхождения применяется для позиций т.к. при замене точка заменялась запятой
+    Dim f As String
+    Dim n As Integer
+    f = "_"
+    n = InStr(s, f)
+        If n <> 0 Then
+                s = Left(s, n - 1)
+        End If
+    ПозицияЧистка = s
+End Function
+
 Sub Перенос_Строк_На_СО_ВР()
 Dim b As Byte
             If Spec.Cells(1, 1).Value = "ч" Then 'убрать или добавить подчеркивание
@@ -99,21 +110,38 @@ Dim b As Byte
                 Else: Pechat.Cells(1, AArray(2)).Font.Underline = xlUnderlineStyleNone
             End If
                   If i = 1 Or i = 2 Then 'Принудительно провести перенос первой строчки
+                        
+                        
                         For b = 1 To 9
-                            Pechat.Cells(1, AArray(b)) = Spec.Cells(1, b)
+                            If b = 1 Then
+                                Pechat.Cells(1, AArray(b)).NumberFormat = "@"
+                                Pechat.Cells(1, AArray(b)).Value = ПозицияЧистка(Spec.Cells(1, b).Value)
+                            Else
+                                Pechat.Cells(1, AArray(b)) = Spec.Cells(1, b)
+                            End If
                         Next b
                                 Set Spec = Spec.Offset(1, 0)
                                 Set Pechat = Pechat.Offset(1, 0)
                   Else
                         If Spec.Cells(1, 10).Value = "" Then 'Проверка метки переноса
                             For b = 1 To 9
+                                If b = 1 Then
+                                    Pechat.Cells(1, AArray(b)).NumberFormat = "@"
+                                    Pechat.Cells(1, AArray(b)).Value = ПозицияЧистка(Spec.Cells(1, b).Value)
+                                Else
                                     Pechat.Cells(1, AArray(b)) = Spec.Cells(1, b)
+                                End If
                             Next b
                                 Set Spec = Spec.Offset(1, 0)
                                 Set Pechat = Pechat.Offset(1, 0)
                          ElseIf i = 1 Then                      'не переносить первую строку
                             For b = 1 To 9
+                                If b = 1 Then
+                                    Pechat.Cells(1, AArray(b)).NumberFormat = "@"
+                                    Pechat.Cells(1, AArray(b)).Value = ПозицияЧистка(Spec.Cells(1, b).Value)
+                                Else
                                     Pechat.Cells(1, AArray(b)) = Spec.Cells(1, b)
+                                End If
                             Next b
                                 Set Spec = Spec.Offset(1, 0)
                                 Set Pechat = Pechat.Offset(1, 0)
